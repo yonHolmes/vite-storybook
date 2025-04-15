@@ -4,9 +4,24 @@ import { Moodlet } from './Moodlet';
 
 import { TransitionMoodlet } from './TransitionMoodlet';
 import { ComponentProps } from 'react';
-import { moodletStoryIconArg } from './Moodlet.stories';
+import { AccountIcon } from '../icons/AccountIcon';
+import { CheckIcon } from '../icons/CheckIcon';
+import { CloseIcon } from '../icons/CloseIcon';
 
-
+const moodletStoryIconArg = {
+  options: [
+    'Account',
+    'Check',
+    'Close',
+    'undefined',
+  ],
+  mapping: {
+    Account: <AccountIcon/>,
+    Check: <CheckIcon/>,
+    Close: <CloseIcon/>,
+    undefined: undefined,
+  }
+};
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

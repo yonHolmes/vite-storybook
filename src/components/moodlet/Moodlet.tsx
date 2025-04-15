@@ -121,6 +121,7 @@ export function Moodlet(props: PropsMoodlet) {
         onMouseLeave={handleMouseLeave}
       >
         {props.leftIcon}
+        {props.label &&
         <span
           style={{
             paddingLeft: props.leftIcon ? '8px' : '0',
@@ -129,7 +130,7 @@ export function Moodlet(props: PropsMoodlet) {
           }}
         >
           {props.label}
-        </span>
+        </span>}
         {props.rightIcon}
       </span>
   );

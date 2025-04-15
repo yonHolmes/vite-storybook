@@ -6,7 +6,7 @@ import { AccountIcon } from '../icons/AccountIcon';
 import { CloseIcon } from '../icons/CloseIcon';
 import { CheckIcon } from '../icons/CheckIcon';
 
-export const moodletStoryIconArg = {
+const moodletStoryIconArg = {
   options: [
     'Account',
     'Check',
@@ -90,6 +90,15 @@ export const Clickable: Story = {
 export const Contrasted: Story = {
   args: {
     label: 'LOR',
+    fill: '#FFD116',
+    color: 'black',
+    leftIcon: 'Close',
+    onClick: () => console.log('Clicked Moodlet'),
+  }
+}
+
+export const IconOnly: Story = {
+  args: {
     fill: '#FFD116',
     color: 'black',
     leftIcon: 'Close',
