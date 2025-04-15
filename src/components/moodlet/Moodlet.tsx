@@ -19,16 +19,20 @@ Define onClick handler (changes UI if so)
 // Primitive String Check
 type HexCode = `#${string}`;
 
+type ClickEvent = React.MouseEvent<Element, MouseEvent>;
+
 interface PropsMoodlet {
   label?: string,
   leftIcon?: ReactNode,
   rightIcon?: ReactNode,
 
   // Dependent on HexCode as we add Opacity to it
-  fill: HexCode,
+  fill?: HexCode,
   color?: string,
+  border?: string,
   fontSize?: FontSize,
-  onClick?: () => void,
+  onClick?: (event: ClickEvent) => void,
+  onContextMenu?: (event: ClickEvent) => void,
 }
 
 type SpanStyle = React.CSSProperties;
@@ -52,31 +56,35 @@ function makeStyles(isHover: boolean, props: PropsMoodlet): React.CSSProperties 
     display: 'flex',
     flexDirection: 'row' as React.CSSProperties["flexDirection"],
     alignItems: 'center',
+    justifyContent: 'space-around',
     fontFamily: 'Public Sans',
     fontWeight: 'bold', // optional?
+    minWidth: '1em',
 
     cursor: isClickable ? 'pointer' : 'default',
     
     color: props.color,
     fontSize: props.fontSize,
     padding: '2px 4px 2px 4px',
-    border: '1px',
-    borderColor: props.fill,
-    borderStyle: 'solid',
     borderRadius: '999px',
 
-    // We know this is a hexcode prior, so we work with it as a string now
-    backgroundColor: props.fill as string,
+    ...(
+      // Add these styles, if fill is defined
+      props.fill ? {
+        border: props.border ?? `1px solid ${props.fill}`,
+        // We know this is a hexcode prior, so we work with it as a string now
+        backgroundColor: props.fill as string,
+      } : {}
+    )
   };
 
-  if (!props.onClick) {
+  if (!props.onClick && props.fill) {
     // Component is Read-Only, so apply 90% tranparancy
     const alpha = alphaToHex(Math.round(255 * 0.15));
     baseStyle.backgroundColor += alpha;
 
     baseStyle.color = props.fill;
   } else {
-
     if (isHover) {
       baseStyle.backgroundColor = LightenDarkenColor(
         baseStyle.backgroundColor as HexCode,
@@ -90,6 +98,7 @@ function makeStyles(isHover: boolean, props: PropsMoodlet): React.CSSProperties 
 }
 
 export function Moodlet(props: PropsMoodlet) {
+  console.log('PropsMoodlet', props);
   // Hover Style approach from https://stackabuse.com/how-to-style-hover-in-react/
   const [isHover, setIsHover] = useState(false);
 
@@ -100,13 +109,13 @@ export function Moodlet(props: PropsMoodlet) {
      setIsHover(false);
   };
 
-  console.log('props', props);
   const styles = makeStyles(isHover, props);
   const computedProps = makeProps(props);
   return (
       <span
         {...computedProps}
         onClick={props.onClick}
+        onContextMenu={props.onContextMenu}
         style={styles}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
